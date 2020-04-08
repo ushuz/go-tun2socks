@@ -5,7 +5,7 @@ GOCLEAN=$(GOCMD) clean
 VERSION=$(shell git describe --tags)
 DEBUG_LDFLAGS=''
 RELEASE_LDFLAGS='-s -w -X main.version=$(VERSION)'
-BUILD_TAGS?=socks
+BUILD_TAGS?=fakedns socks
 BUILDDIR=$(shell pwd)/build
 CMDDIR=$(shell pwd)/cmd/tun2socks
 PROGRAM=tun2socks

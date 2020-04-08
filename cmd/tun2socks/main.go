@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/eycorsican/go-tun2socks/common/dns"
 	"github.com/eycorsican/go-tun2socks/common/dns/blocker"
 	"github.com/eycorsican/go-tun2socks/common/log"
 	_ "github.com/eycorsican/go-tun2socks/common/log/simple" // Register a simple logger.
@@ -48,6 +49,11 @@ type CmdArgs struct {
 	UdpTimeout      *time.Duration
 	LogLevel        *string
 	DnsFallback     *bool
+
+	// fakedns
+	EnableFakeDns *bool
+	FakeDnsMinIP  *string
+	FakeDnsMaxIP  *string
 }
 
 type cmdFlag uint
@@ -81,6 +87,8 @@ func (a *CmdArgs) addFlag(f cmdFlag) {
 var args = new(CmdArgs)
 
 var lwipWriter io.Writer
+
+var fakeDns dns.FakeDns
 
 const (
 	MTU = 1500
