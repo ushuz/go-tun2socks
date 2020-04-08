@@ -54,6 +54,10 @@ type CmdArgs struct {
 	EnableFakeDns *bool
 	FakeDnsMinIP  *string
 	FakeDnsMaxIP  *string
+
+	// shadowsocks
+	ProxyCipher   *string
+	ProxyPassword *string
 }
 
 type cmdFlag uint
