@@ -1,5 +1,5 @@
 GOCMD=go
-XGOCMD=xgo
+XGOCMD=GOPATH=$(shell go env GOPATH) $(shell go env GOPATH)/bin/xgo
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 VERSION=$(shell git describe --tags)
@@ -9,19 +9,19 @@ BUILD_TAGS?=fakedns shadowsocks socks
 BUILDDIR=$(shell pwd)/build
 CMDDIR=$(shell pwd)/cmd/tun2socks
 PROGRAM=tun2socks
+TARGETS?=ios/arm-7
 
-BUILD_CMD="cd $(CMDDIR) && $(GOBUILD) -ldflags $(RELEASE_LDFLAGS) -o $(BUILDDIR)/$(PROGRAM) -v -tags '$(BUILD_TAGS)'"
-XBUILD_CMD="cd $(BUILDDIR) && $(XGOCMD) -ldflags $(RELEASE_LDFLAGS) -tags '$(BUILD_TAGS)' --targets=*/* $(CMDDIR)"
+.PHONY: build
 
-all: build
+all: build xbuild
 
 build:
 	mkdir -p $(BUILDDIR)
-	eval $(BUILD_CMD)
+	$(GOBUILD) -ldflags $(RELEASE_LDFLAGS) -tags '$(BUILD_TAGS)' -v -o $(BUILDDIR)/$(PROGRAM) $(CMDDIR)
 
 xbuild:
 	mkdir -p $(BUILDDIR)
-	eval $(XBUILD_CMD)
+	$(XGOCMD)  -ldflags $(RELEASE_LDFLAGS) -tags '$(BUILD_TAGS)' -v -dest $(BUILDDIR) --targets $(TARGETS) $(CMDDIR)
 
 travisbuild: xbuild
 
